@@ -1,0 +1,366 @@
+<html>
+<head>
+<title>layer OSM, Google, Bing maps </title>
+<link rel="stylesheet" href="http://www.openlayers.org/dev/theme/default/style.css" type="text/css">
+<link rel="stylesheet" href="http://www.openlayers.org/dev/examples/style.css" type="text/css">
+<style type="text/css">
+.openlayers-tooltip-description{
+  width:200px;
+  font-size:.9em;
+}
+</style>
+<script src="http://www.openlayers.org/dev/OpenLayers.js"></script>
+<!--<script src="http://www.openlayers.org/api/OpenLayers.js"></script>-->
+<!--<script src="http://www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>-->
+<!-------------------------------------------------------------   Codice Google                                                                      -->
+<script src="http://maps.google.com/maps/api/js?v=3&sensor=false"></script>
+<!--<script src='http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAp_bTGl8Z9L9KerNZ0NhrfhTz3110dEFZ1OhnarblFugjXwif2BTy5fZEE-90NicNphmilssljCvI3w'></script>-->
+<!--<script src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.2&mkt=en-us"></script>-->
+<!--<script type="text/javascript" src="http://maps.yahooapis.com/v3.5.2/fl/javascript/apiloader.js?appid=YD-rXo9QmA_JHsBbc5G0FYOaA--"></script>-->
+<script type="text/javascript">
+ 
+  // Posizione iniziale della mappa
+  var lat=51.17188;
+  var lon=-115.55883;
+  var zoom=17;
+ 
+  function init() {
+ 
+    map = new OpenLayers.Map ("map", 
+    {
+      controls:[ 
+        new OpenLayers.Control.Navigation(),
+        new OpenLayers.Control.PanZoomBar(),
+        new OpenLayers.Control.Permalink('permalink'),
+        new OpenLayers.Control.MousePosition(),                    
+        new OpenLayers.Control.Attribution(),
+        new OpenLayers.Control.LayerSwitcher()
+      ],
+      maxExtent: new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34),
+      maxResolution: 156543.0399,
+      numZoomLevels: 25,
+      units: 'm',
+      projection: new OpenLayers.Projection("EPSG:900913"),
+      displayProjection: new OpenLayers.Projection("EPSG:4326")
+    } );
+ 
+ /*
+      // OSM layers
+      var mapnik = new OpenLayers.Layer.OSM.Mapnik("Mapnik"); 
+      var tilesathome = new OpenLayers.Layer.OSM.Osmarender("Osmarender");      
+      var cyclemap = new OpenLayers.Layer.OSM.CycleMap("CycleMap");
+*/
+    // Google Layers          
+    //var gmap = new OpenLayers.Layer.Google("Google Map", {sphericalMercator:true, numZoomLevels: 21});
+    //var gphy = new OpenLayers.Layer.Google("Google Physical", {type: G_PHYSICAL_MAP,sphericalMercator:true, numZoomLevels: 16} );
+    //var gsat = new OpenLayers.Layer.Google("Google Satellite", {type: G_SATELLITE_MAP, sphericalMercator:true,numZoomLevels: 21} );
+    
+    // Google V3 Layers
+    //var gphyv3 = new OpenLayers.Layer.Google("Google Physical", 
+      //{type: google.maps.MapTypeId.TERRAIN} // used to be {type: G_PHYSICAL_MAP}
+    //);
+    var gmapv3 = new OpenLayers.Layer.Google("Google Streets", // the default
+      {numZoomLevels: 20}
+      // default type, no change needed here
+    );
+    var ghybv3 = new OpenLayers.Layer.Google("Google Hybrid",
+      {type: google.maps.MapTypeId.HYBRID, numZoomLevels: 20}
+      // used to be {type: G_HYBRID_MAP, numZoomLevels: 20}
+    );
+    var gsatv3 = new OpenLayers.Layer.Google("Google Satellite",
+      {type: google.maps.MapTypeId.SATELLITE, numZoomLevels: 22}
+      // used to be {type: G_SATELLITE_MAP, numZoomLevels: 22}
+    );
+/* 
+      // Bing Maps layers
+      var aerial = new OpenLayers.Layer.VirtualEarth("Bing Satellite", {type: VEMapStyle.Aerial, sphericalMercator:true, numZoomLevels: 19});
+      var shaded = new OpenLayers.Layer.VirtualEarth("Bing Map", {type: VEMapStyle.Shaded, sphericalMercator:true, numZoomLevels: 21});
+ 
+      // Yahoo layers
+      //var yahoosat = new OpenLayers.Layer.Yahoo("Yahoo Satellite",{'type': YAHOO_MAP_SAT, 'sphericalMercator': true,attribution: '<a href="http://info.yahoo.com/legal/us/yahoo/maps/mapstou/">Terms of Use</a> for <a href="http://maps.yahoo.com/">Yahoo Local Maps</a>, Uses GeoLite data by <a href="http://maxmind.com/">MaxMind</a>', numZoomLevels:18 });
+      //var yahoostreet = new OpenLayers.Layer.Yahoo( "Yahoo Street", { 'sphericalMercator': true, attribution: '<a href="http://info.yahoo.com/legal/us/yahoo/maps/mapstou/">Terms of Use</a> for <a href="http://maps.yahoo.com/">Yahoo Local Maps</a>, Uses GeoLite data by <a href="http://maxmind.com/">MaxMind</a>', numZoomLevels:18 } );
+ 
+ 
+    map.addLayers([ mapnik,tilesathome,cyclemap,gmap,gphy,gsat,aerial,shaded]);//,yahoosat,yahoostreet ] );
+*/
+    //map.addLayers([gmap,gphy,gsat,gmav3,gphyv3,gsatv3,ghybv3]);
+
+    map.addLayers([gmapv3,gsatv3,ghybv3]);
+    //map.addControl(new OpenLayers.Control.LayerSwitcher());
+    var mousePositionCtrl = new OpenLayers.Control.MousePosition({
+      prefix: '<a target="_blank" ' +
+        'href="http://spatialreference.org/ref/epsg/4326/">' +
+        'EPSG:4326</a> coordinates: '
+    });
+    //map.addControl(mousePositionCtrl);
+
+      var lonLat = new OpenLayers.LonLat( lon ,lat )
+          .transform(
+            new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+            map.getProjectionObject() // to Spherical Mercator Projection
+          );
+ 
+    map.setCenter (lonLat, zoom); 
+
+    // Creating the markers
+    
+    var markers = new OpenLayers.Layer.Markers( "Markers" );
+    map.addLayer(markers);
+
+    var size = new OpenLayers.Size(41,45);
+    var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+    var icon_blue = new OpenLayers.Icon('marker/marker_blue.png', size, offset);
+    var icon_green = new OpenLayers.Icon('marker/marker_green.png', size, offset);
+    var icon_darkgreen = new OpenLayers.Icon('marker/marker_darkgreen.png', size, offset);
+    var icon_red = new OpenLayers.Icon('marker/marker_red.png', size, offset);
+
+    var icon2_blue = new OpenLayers.Icon('marker/marker2_blue.png', size, offset);
+    var icon2_green = new OpenLayers.Icon('marker/marker2_green.png', size, offset);
+    var icon2_yellow = new OpenLayers.Icon('marker/marker2_yellow.png', size, offset);
+    var icon2_red = new OpenLayers.Icon('marker/marker2_red.png', size, offset);
+
+    var icon3_blue = new OpenLayers.Icon('marker/marker3_blue.png', size, offset);
+    var icon3_green = new OpenLayers.Icon('marker/marker3_green.png', size, offset);
+    var icon3_black = new OpenLayers.Icon('marker/marker3_black.png', size, offset);
+    var icon3_red = new OpenLayers.Icon('marker/marker3_red.png', size, offset);
+
+    // Type1
+    var marker_1 = new OpenLayers.Marker(new OpenLayers.LonLat(-115.56210,51.17294).transform(
+      new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()
+    ),icon_blue.clone());
+
+    marker_1.events.register('mousedown', marker_1, function(evt) {
+      popupClear();
+      var popup1 = new OpenLayers.Popup.FramedCloud("DCC",
+        marker_1.lonlat,
+        new OpenLayers.Size(200, 200), 
+        "<div style='width:200px;'><h2>Donald Cameron Centre</h2><br/><img src='img/dcc.jpg' alt='Donald Cameron Centre' width='194'height='80'><br/><a href='http://www.banffcentre.ca/'>test link</a><br/><p>Introduction dwawakkddddddddk</p></div>",
+        null,
+        true
+      );
+      map.addPopup(popup1);
+    });
+      
+    markers.addMarker(marker_1);
+
+    var marker_2 = new OpenLayers.Marker(new OpenLayers.LonLat(-115.56205,51.17223).transform(
+      new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()
+    ),icon_green.clone());
+
+    marker_2.events.register('mousedown', marker_2, function(evt) {
+      popupClear();
+      var popup2 = new OpenLayers.Popup.FramedCloud("KC",
+        marker_2.lonlat,
+        new OpenLayers.Size(200, 200), 
+        "<div style='width:200px;'><h2>Kinnear Centre for Creativity and Innovation</h2><br/><img src='img/kc.jpg' alt='Kinnear Centre for Creativity and Innovation' width='194'height='80'><br/><p>Introduction dwawakkddddddddk</p></div>",
+        null,
+        true
+      );
+      map.addPopup(popup2);
+    });
+
+    markers.addMarker(marker_2);
+
+    var marker_3 = new OpenLayers.Marker(new OpenLayers.LonLat(-115.56110,51.17160).transform(
+      new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()
+    ),icon_darkgreen.clone());
+
+    marker_3.events.register('mousedown', marker_3, function(evt) {
+      popupClear();
+      var popup3 = new OpenLayers.Popup.FramedCloud("SBB",
+        marker_3.lonlat,
+        new OpenLayers.Size(200, 200), 
+        "<div style='width:200px;'><h2>Sally Borden Building</h2><br/><img src='img/sbb.jpg' alt='Sally Borden Building' width='194'height='80'><br/><p>Introduction dwawakkddddddddk</p></div>",
+        null,
+        true
+      );
+      map.addPopup(popup3);
+    });
+
+    markers.addMarker(marker_3);
+
+    var marker_4 = new OpenLayers.Marker(new OpenLayers.LonLat(-115.56085,51.17350).transform(
+      new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()
+    ),icon_red.clone());
+
+    marker_4.events.register('mousedown', marker_4, function(evt) {
+      popupClear();
+      var popup4 = new OpenLayers.Popup.FramedCloud("EHT",
+        marker_4.lonlat,
+        new OpenLayers.Size(200, 200), 
+        "<div style='width:200px;'><h2>Eric Harvie Theatre</h2><br/><img src='img/eht.jpg' alt='Eric Harvie Theatre' width='194'height='80'><br/><p>Introduction dwawakkddddddddk</p></div>",
+        null,
+        true
+      );
+      map.addPopup(popup4);
+    });
+
+    markers.addMarker(marker_4);
+
+    // Type2
+    var marker_5 = new OpenLayers.Marker(new OpenLayers.LonLat(-115.56019,51.17311).transform(
+      new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()
+    ),icon2_blue.clone());
+
+    marker_5.events.register('mousedown', marker_5, function(evt) {
+      popupClear();
+      var popup5 = new OpenLayers.Popup.FramedCloud("MGT",
+        marker_5.lonlat,
+        new OpenLayers.Size(200, 200), 
+        "<div style='width:200px;'><h2>Margaret Greenham Theatre</h2><br/><img src='img/mgt.jpg' alt='Margaret Greenham Theatre' width='194'height='80'><br/><p>Introduction dwawakkddddddddk</p></div>",
+        null,
+        true
+      );
+      map.addPopup(popup5);
+    });
+
+    markers.addMarker(marker_5);
+
+    var marker_6 = new OpenLayers.Marker(new OpenLayers.LonLat(-115.55956,51.17272).transform(
+      new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()
+    ),icon2_green.clone());
+
+    marker_6.events.register('mousedown', marker_6, function(evt) {
+      popupClear();
+      var popup6 = new OpenLayers.Popup.FramedCloud("MSD",
+        marker_6.lonlat,
+        new OpenLayers.Size(200, 200), 
+        "<div style='width:200px;'><h2>Music Sound Building</h2><br/><img src='img/msd.jpg' alt='Music Sound Building' width='194'height='80'><br/><p>Introduction dwawakkddddddddk</p></div>",
+        null,
+        true
+      );
+      map.addPopup(popup6);
+    });
+
+    markers.addMarker(marker_6);
+
+    var marker_7 = new OpenLayers.Marker(new OpenLayers.LonLat(-115.56086,51.17230).transform(
+      new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()
+    ),icon2_yellow.clone());
+
+    marker_7.events.register('mousedown', marker_7, function(evt) {
+      popupClear();
+      var popup7 = new OpenLayers.Popup.FramedCloud("LH",
+        marker_7.lonlat,
+        new OpenLayers.Size(200, 200), 
+        "<div style='width:200px;'><h2>Lloyd Hall</h2><br/><img src='img/lh.jpg' alt='Lloyd Hall' width='194'height='80'><br/><p>Introduction dwawakkddddddddk</p></div>",
+        null,
+        true
+      );
+      map.addPopup(popup7);
+    });
+
+
+    markers.addMarker(marker_7);
+
+    var marker_8 = new OpenLayers.Marker(new OpenLayers.LonLat(-115.56240,51.17151).transform(
+      new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()
+    ),icon2_red.clone());
+
+    marker_8.events.register('mousedown', marker_8, function(evt) {
+      popupClear();
+      var popup8 = new OpenLayers.Popup.FramedCloud("JPLB",
+        marker_8.lonlat,
+        new OpenLayers.Size(200, 200), 
+        "<div style='width:200px;'><h2>Jeanne & Peter Lougheed Building</h2><br/><img src='img/jplb.jpg' alt='Jeanne & Peter Lougheed Building' width='194'height='80'><br/><p>Introduction dwawakkddddddddk</p></div>",
+        null,
+        true
+      );
+      map.addPopup(popup8);
+    });
+
+    markers.addMarker(marker_8);
+
+    // Type3
+    var marker_9 = new OpenLayers.Marker(new OpenLayers.LonLat(-115.56336,51.17282).transform(
+      new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()
+    ),icon3_blue.clone());
+
+    marker_9.events.register('mousedown', marker_9, function(evt) {
+      popupClear();
+      var popup9 = new OpenLayers.Popup.FramedCloud("MBB",
+        marker_9.lonlat,
+        new OpenLayers.Size(200, 200), 
+        "<div style='width:200px;'><h2>Max Bell Building</h2><br/><img src='img/mbb.jpg' alt='Max Bell Building' width='194'height='80'><br/><p>Introduction dwawakkddddddddk</p></div>",
+        null,
+        true
+      );
+      map.addPopup(popup9);
+    });
+
+    markers.addMarker(marker_9);
+
+    var marker_10 = new OpenLayers.Marker(new OpenLayers.LonLat(-115.55858,51.17223).transform(
+      new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()
+    ),icon3_green.clone());
+
+    marker_10.events.register('mousedown', marker_10, function(evt) {
+      popupClear();
+      var popup10 = new OpenLayers.Popup.FramedCloud("SB",
+        marker_10.lonlat,
+        new OpenLayers.Size(200, 200), 
+        "<div style='width:200px;'><h2>Service Building</h2><br/><img src='img/sb.jpg' alt='Service Building' width='194'height='80'><br/><p>Introduction dwawakkddddddddk</p></div>",
+        null,
+        true
+      );
+      map.addPopup(popup10);
+    });
+
+    markers.addMarker(marker_10);
+
+    var marker_11 = new OpenLayers.Marker(new OpenLayers.LonLat(-115.56244,51.17106).transform(
+      new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()
+    ),icon3_black.clone());
+
+    marker_11.events.register('mousedown', marker_11, function(evt) {
+      popupClear();
+      var popup11 = new OpenLayers.Popup.FramedCloud("WPG",
+        marker_11.lonlat,
+        new OpenLayers.Size(200, 200), 
+        "<div style='width:200px;'><h2>Walter Phillips Gallery</h2><br/><img src='img/wpg.jpg' alt='Walter Phillips Gallery' width='194'height='80'><br/><p>Introduction dwawakkddddddddk</p></div>",
+        null,
+        true
+      );
+      map.addPopup(popup11);
+    });
+
+    markers.addMarker(marker_11);
+
+    var marker_12 = new OpenLayers.Marker(new OpenLayers.LonLat(-115.56038,51.17081).transform(
+      new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()
+    ),icon3_red.clone());
+
+    marker_12.events.register('mousedown', marker_12, function(evt) {
+      popupClear();
+      var popup12 = new OpenLayers.Popup.FramedCloud("PDC",
+        marker_12.lonlat,
+        new OpenLayers.Size(200, 200), 
+        "<div style='width:200px;'><h2>Prodessional Development Centre<br/>(Front Desk Reception)</h2><br/><img src='img/pdc.jpg' alt='Prodessional Development Centre' width='194'height='80'><br/><p>Introduction dwawakkdddddddd ddddk dawdawdwa dwadadawd</p></div>",
+        null,
+        true
+      );
+      map.addPopup(popup12);
+    });
+
+    markers.addMarker(marker_12);
+    // function to remove popups
+    function popupClear() {
+      //alert('number of popups '+map.popups.length);
+      for(i=0; i<map.popups.length; i++ ) {
+        //map.popups[i].destroy();
+        map.removePopup(map.popups[i]);
+        
+        //map.popups[i] = null;
+      }
+    }
+ }
+ 
+</script>
+</head>
+ 
+<body onload="init();">
+ <span style="font-family: Arial; font-weight: bold;">Testing Maps</span>
+<div style="width:100%; height:95%" id="map"></div>
+</body>
+ 
+</html>

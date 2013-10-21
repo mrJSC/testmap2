@@ -1,0 +1,93 @@
+body { 
+  font: 12px 'Helvetica Neue', Arial, sans-serif;
+  background: #2c2c2c;
+  color: #222;
+  line-height: 1.6em;
+}
+
+a:link {text-decoration:none; color:#2c2c2c; }    /* unvisited link */
+a:visited {text-decoration:none; color:#2c2c2c; } /* visited link */
+a:hover {text-decoration:none; color:#2c2c2c; }   /* mouse over link */
+a:active {text-decoration:none; color:#2c2c2c; }  /* selected link */
+
+#blog {
+  background: #2c2c2c; 
+}
+
+#logo {
+  background: #fff; 
+}
+
+#logoposition {
+  background: #fff; 
+  position: relative;
+  width: 60%;
+  left: 20%;
+}
+
+#logoposition .bloglogo{
+  width: 60%;
+  position: static; 
+}
+
+#logoposition .sitelogo{
+  width: 15%;
+  position: absolute; 
+  right: 0;
+  bottom: 20%;
+}
+
+#meunimg{
+  position: relative;
+  width: 60%;
+  left: 20%;
+}
+
+#meunimg img{
+  width: 100%;
+}
+
+#masonry_blog {
+  background: #2c2c2c; 
+  width:60%;
+  position: relative;
+  left: 20%;
+}
+
+/*
+#magnify {
+  position: absolute;
+  top: 40%;
+  left: 36%;
+  opacity: 0.6;
+  -ms-transition: all 0.5s linear;
+  -webkit-transition: all 0.5s linear;
+  -moz-transition: all 0.5s linear;
+  -o-transition: all 0.5s linear;
+  transition: all 0.5s linear;
+}
+*/
+
+.caption{
+  display: none;
+}
+
+
+.display{
+  display: none;
+  position: absolute;
+  border: 10px solid #FFFFFF;
+  /*width: 56%;
+   height: 40%;*/
+  z-index: 9000;
+  top: 35%;
+  left: 2%;
+  background: #000;
+}
+/*
+#displayimg{
+  position: relative;
+  width: 40%;
+  left: 0;
+  /*top: 10%;
+}*/
