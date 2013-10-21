@@ -2,7 +2,7 @@ jQuery(document).ready(function($) {
                     var $mousein = false;
                     var CollManag = (function() {
                     var $ctCollContainer = $('#masonry_blog');
-                    $ctCollContainer.masonry('reload');
+                    //$ctCollContainer.masonry('reload');
                     var init = function() {
                         changeColCnt();
                         initEvents();
@@ -67,7 +67,7 @@ jQuery(document).ready(function($) {
                             loading: {
                                 finishedMsg: "<font color='white'><em>No more Images to load...</em></font>",
                                 //img: "http://i.imgur.com/qkKy8.gif",
-                                img: wnm_custom.template_url + "/js/img/loading.gif",
+                                img: "./img/loading.gif",
                                 msgText: "<font color='white'><em>Loading Images...</em></font>",
                                 selector: '#messagediv',
                                 speed: 'slow'
@@ -166,7 +166,7 @@ jQuery(document).ready(function($) {
 
                                 $("#magnify").remove();
 
-                                $(this).append("<div id='divmagnify'><a href='" + $(this).find('.dyimglink').attr('href') + "'  rel='lightbox' title='" + $(this).find('.dyimglink').attr('title') + "'> <img id='magnify' class='clsmagnify' src='" + wnm_custom.template_url + "/js/img/magnify.png'></a></div>");
+                                $(this).append("<div id='divmagnify'><a href='" + $(this).find('.dyimglink').attr('href') + "'  rel='lightbox' title='" + $(this).find('.dyimglink').attr('title') + "'> <img id='magnify' class='clsmagnify' src='./img/magnify.png'></a></div>");
                                 var $top = $img.width()/2;
                                 var $left =  $img.height()/2;
                                 
