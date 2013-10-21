@@ -12,6 +12,13 @@ a:active {text-decoration:none; color:#2c2c2c; }  /* selected link */
 
 #blog {
   background: #2c2c2c; 
+  margin-top: 5px;
+  position: absolute;
+  left:0;
+  right:0;
+  width: 100%;
+  /*padding-top: 60px; */
+  no-repeat;
 }
 
 #logo {
@@ -91,3 +98,15 @@ a:active {text-decoration:none; color:#2c2c2c; }  /* selected link */
   left: 0;
   /*top: 10%;
 }*/
+
+#messagediv {
+  position: absolute;
+  /*left:0;
+  right:0;*/
+  bottom: 0;
+  left:42%;
+  /*width: 100%;*/
+  margin: 0 auto;
+  /*background: green;*/
+  z-index: 9999;
+}
